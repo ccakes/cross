@@ -1,4 +1,4 @@
-FROM ubuntu:12.04
+FROM debian:9-slim
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -15,7 +15,8 @@ RUN apt-get update && \
     autoconf \
     make \
     file \
-    binutils
+    binutils \
+    libzmq3-dev
 
 COPY xargo.sh /
 RUN bash /xargo.sh
@@ -36,6 +37,11 @@ RUN bash /qemu.sh x86_64 linux softmmu
 
 COPY dropbear.sh /
 RUN bash /dropbear.sh
+
+RUN apt-get install -y --no-install-recommends \
+    gnupg \
+    gnupg2 \
+    dirmngr
 
 COPY linux-image.sh /
 RUN bash /linux-image.sh x86_64
